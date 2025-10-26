@@ -50,7 +50,7 @@
             android:layout_gravity="center_horizontal"
             app:lottie_autoPlay="false"
             app:lottie_loop="false"
-            app:lottie_fileName="tree_growth.json" />
+            app:lottie_rawRes="@raw/tree_growth"/>
 
         <!-- Button Container -->
         <LinearLayout
