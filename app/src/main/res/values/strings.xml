@@ -1,3 +1,68 @@
 <resources>
-    <string name="app_name">LearningCultureOne</string>
+    <string name="app_name">TravelTree</string>
+    <string name="menu_icon_desc">Menu Button</string>
+    <string name="lock_icon_desc">App Lock Button</string>
+    <string name="character_icon_desc">Main Character Icon</string>
+
+    <string name="btn_culture">Culture</string>
+    <string name="btn_currency">Currency</string>
+    <string name="btn_emergency">Emergency Contacts</string>
+    <string name="btn_travel">Travel Requirements</string>
+    <string name="btn_greetings">Greetings</string>
+    <string-array name="country_list">
+        <item>Argentina</item>
+        <item>Australia</item>
+        <item>Austria</item>
+        <item>Bangladesh</item>
+        <item>Belgium</item>
+        <item>Brazil</item>
+        <item>Canada</item>
+        <item>China</item>
+        <item>Denmark</item>
+        <item>Egypt</item>
+        <item>Finland</item>
+        <item>France</item>
+        <item>Germany</item>
+        <item>Greece</item>
+        <item>HongKong</item>
+        <item>Hungary</item>
+        <item>India</item>
+        <item>Indonesia</item>
+        <item>Iran, Islamic Republic of</item>
+        <item>Iraq</item>
+        <item>Ireland</item>
+        <item>Israel</item>
+        <item>Italy</item>
+        <item>Japan</item>
+        <item>Kenya</item>
+        <item>Korea, Republic of</item>
+        <item>Kuwait</item>
+        <item>Malaysia</item>
+        <item>Mexico</item>
+        <item>Morocco</item>
+        <item>Netherlands</item>
+        <item>New Zealand</item>
+        <item>Nigeria</item>
+        <item>Norway</item>
+        <item>Pakistan</item>
+        <item>Philippines</item>
+        <item>Poland</item>
+        <item>Portugal</item>
+        <item>Qatar</item>
+        <item>Russian Federation</item>
+        <item>Saudi Arabia</item>
+        <item>Singapore</item>
+        <item>South Africa</item>
+        <item>Spain</item>
+        <item>Sri Lanka</item>
+        <item>Sweden</item>
+        <item>Switzerland</item>
+        <item>Thailand</item>
+        <item>United Arab Emirates</item>
+        <item>United Kingdom</item>
+        <item>United States of America</item>
+    </string-array>
+
+
+
 </resources>

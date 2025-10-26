@@ -1,4 +1,4 @@
-package com.example.traveltree
+package com.example.learningcultureone
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,7 +9,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.airbnb.lottie.LottieAnimationView
-import com.google.android.material.navigation.NavigationView
+import com.example.learningcultureone.R
+import com.example.learningcultureone.CultureInfoActivity
+import com.example.learningcultureone.CurrencyInfoActivity
+import com.example.learningcultureone.EmergencyInfoActivity
+import com.example.learningcultureone.TravelreqInfoActivity
+import com.example.learningcultureone.GreetingsActivity
 
 class HomeActivity : AppCompatActivity() {
 
@@ -20,8 +25,9 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+        setContentView(R.layout.activity_home) // Make sure this layout exists in res/layout
 
+        // Initialize views
         treeAnimation = findViewById(R.id.treeAnimation)
         drawerLayout = findViewById(R.id.drawerLayout)
         menuBtn = findViewById(R.id.menuBtn)
@@ -59,8 +65,10 @@ class HomeActivity : AppCompatActivity() {
     private fun completeLevel(levelCompleted: Int) {
         treeAnimation.setMinAndMaxFrame(0, levelCompleted * 20)
         treeAnimation.playAnimation()
+
         val prefs = getSharedPreferences("module_progress", MODE_PRIVATE)
         prefs.edit().putInt("completed", levelCompleted).apply()
+
         if (levelCompleted == totalLevels) {
             Toast.makeText(this, "Tree fully grown! 🎉", Toast.LENGTH_LONG).show()
         }
