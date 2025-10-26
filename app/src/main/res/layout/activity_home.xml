@@ -11,7 +11,7 @@
         android:id="@+id/navView"
         android:layout_width="280dp"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
+        android:layout_gravity="end"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/nav_menu" />
 
@@ -30,6 +30,17 @@
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/bg" />
 
+        <!-- Back Button -->
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_margin="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_back_arrow"
+            android:contentDescription="@string/back_button_desc"
+            app:tint="@android:color/white"/>
+
         <!-- Menu Button -->
         <ImageButton
             android:id="@+id/menuBtn"
@@ -38,7 +49,9 @@
             android:layout_margin="16dp"
             android:src="@drawable/ic_menu"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/menu_button_desc" />
+            android:contentDescription="@string/menu_button_desc"
+            android:layout_gravity="end|top" />
+
 
 
         <!-- Tree Animation -->

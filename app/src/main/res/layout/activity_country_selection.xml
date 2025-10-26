@@ -1,31 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="24dp"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:background="#FAFAFA">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:text="Select Your Country"
-        android:textSize="20sp"
-        android:layout_marginBottom="16dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <Spinner
-        android:id="@+id/spinnerCountry"
+    <!-- Animated background -->
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_bg_country"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:paddingVertical="12dp"
-        android:layout_marginBottom="24dp" />
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/bg" />
 
-
-    <Button
-        android:id="@+id/btnNext"
-        android:text="Next"
+    <!-- Foreground content -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:padding="24dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@android:color/transparent">
+
+        <TextView
+            android:text="Select Your Country"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:layout_marginBottom="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Spinner
+            android:id="@+id/spinnerCountry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:paddingVertical="12dp"
+            android:background="@drawable/spinner_border"
+            android:layout_marginBottom="24dp" />
+
+        <Button
+            android:id="@+id/btnNext"
+            android:text="Next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</FrameLayout>

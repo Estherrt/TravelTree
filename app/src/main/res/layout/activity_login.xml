@@ -5,7 +5,8 @@
     android:gravity="center"
     android:orientation="vertical"
     android:padding="24dp"
-    android:background="@android:color/white">
+    android:background="#9494E7">
+
 
     <EditText
         android:id="@+id/etUsername"

@@ -2,6 +2,7 @@ package com.example.learningcultureone
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
@@ -9,14 +10,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.airbnb.lottie.LottieAnimationView
-import com.example.learningcultureone.R
-import com.example.learningcultureone.CultureInfoActivity
-import com.example.learningcultureone.CurrencyInfoActivity
-import com.example.learningcultureone.EmergencyInfoActivity
-import com.example.learningcultureone.TravelreqInfoActivity
-import com.example.learningcultureone.GreetingsActivity
+
 
 class HomeActivity : AppCompatActivity() {
+
 
     private lateinit var treeAnimation: LottieAnimationView
     private lateinit var drawerLayout: DrawerLayout
@@ -27,14 +24,23 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home) // Make sure this layout exists in res/layout
 
+        val backButton = findViewById<ImageButton>(R.id.backButton)
+        backButton.setOnClickListener {
+            val intent = Intent(this, CountrySelectionActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+
         // Initialize views
         treeAnimation = findViewById(R.id.treeAnimation)
         drawerLayout = findViewById(R.id.drawerLayout)
         menuBtn = findViewById(R.id.menuBtn)
 
         menuBtn.setOnClickListener {
-            drawerLayout.openDrawer(GravityCompat.START)
+            drawerLayout.openDrawer(GravityCompat.END)
         }
+
 
         setupLevelButtons()
     }
