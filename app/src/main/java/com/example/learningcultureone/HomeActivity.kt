@@ -1,43 +1,75 @@
-package com.example.learningcultureone
+package com.example.traveltree
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
+import android.widget.ImageButton
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import com.airbnb.lottie.LottieAnimationView
+import com.google.android.material.navigation.NavigationView
 
 class HomeActivity : AppCompatActivity() {
 
+    private lateinit var treeAnimation: LottieAnimationView
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var menuBtn: ImageButton
+    private val totalLevels = 5
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        supportActionBar?.hide()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        // Linking the buttons with their IDs in activity_home.xml
-        val cultureButton = findViewById<Button>(R.id.btn_culture)
-        val emergencyButton = findViewById<Button>(R.id.btn_emergency)
-        val currencyButton = findViewById<Button>(R.id.btn_currency)
-        val travelButton = findViewById<Button>(R.id.btn_travel)
+        treeAnimation = findViewById(R.id.treeAnimation)
+        drawerLayout = findViewById(R.id.drawerLayout)
+        menuBtn = findViewById(R.id.menuBtn)
 
-        // Button click to go to CultureInfoActivity
-        cultureButton.setOnClickListener {
-            val intent = Intent(this, CultureInfoActivity::class.java)
-            startActivity(intent)
+        menuBtn.setOnClickListener {
+            drawerLayout.openDrawer(GravityCompat.START)
         }
 
-        // Future navigation for these options:
-        emergencyButton.setOnClickListener {
-            val intent = Intent(this, EmergencyInfoActivity::class.java)
-            startActivity(intent)
-        }
+        setupLevelButtons()
+    }
 
-        currencyButton.setOnClickListener {
-            val intent = Intent(this, CurrencyInfoActivity::class.java)
-            startActivity(intent)
+    private fun setupLevelButtons() {
+        findViewById<Button>(R.id.btnCulture).setOnClickListener {
+            completeLevel(1)
+            startActivity(Intent(this, CultureInfoActivity::class.java))
         }
+        findViewById<Button>(R.id.btnCurrency).setOnClickListener {
+            completeLevel(2)
+            startActivity(Intent(this, CurrencyInfoActivity::class.java))
+        }
+        findViewById<Button>(R.id.btnEmergency).setOnClickListener {
+            completeLevel(3)
+            startActivity(Intent(this, EmergencyInfoActivity::class.java))
+        }
+        findViewById<Button>(R.id.btnTravel).setOnClickListener {
+            completeLevel(4)
+            startActivity(Intent(this, TravelreqInfoActivity::class.java))
+        }
+        findViewById<Button>(R.id.btnGreetings).setOnClickListener {
+            completeLevel(5)
+            startActivity(Intent(this, GreetingsActivity::class.java))
+        }
+    }
 
-        travelButton.setOnClickListener {
-            val intent = Intent(this, TravelreqInfoActivity::class.java)
-            startActivity(intent)
+    private fun completeLevel(levelCompleted: Int) {
+        treeAnimation.setMinAndMaxFrame(0, levelCompleted * 20)
+        treeAnimation.playAnimation()
+        val prefs = getSharedPreferences("module_progress", MODE_PRIVATE)
+        prefs.edit().putInt("completed", levelCompleted).apply()
+        if (levelCompleted == totalLevels) {
+            Toast.makeText(this, "Tree fully grown! 🎉", Toast.LENGTH_LONG).show()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val prefs = getSharedPreferences("module_progress", MODE_PRIVATE)
+        val completedModules = prefs.getInt("completed", 0)
+        treeAnimation.progress = completedModules * 0.2f
     }
 }
