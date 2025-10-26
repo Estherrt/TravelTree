@@ -37,7 +37,9 @@
             android:layout_height="56dp"
             android:layout_margin="16dp"
             android:src="@drawable/ic_menu"
-            android:background="?attr/selectableItemBackgroundBorderless" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/menu_button_desc" />
+
 
         <!-- Tree Animation -->
         <com.airbnb.lottie.LottieAnimationView

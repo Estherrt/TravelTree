@@ -158,8 +158,7 @@ class GreetingsActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         markLevelAsCompleted()
-        startActivity(Intent(this, HomeActivity::class.java))
-        finish()
+        super.onBackPressed()
     }
 
     override fun onDestroy() {

@@ -9,6 +9,8 @@
     <string name="btn_emergency">Emergency Contacts</string>
     <string name="btn_travel">Travel Requirements</string>
     <string name="btn_greetings">Greetings</string>
+    <string name="menu_button_desc">Open navigation menu</string>
+
     <string-array name="country_list">
         <item>Argentina</item>
         <item>Australia</item>
