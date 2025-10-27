@@ -7,7 +7,7 @@
     android:padding="24dp"
     android:background="#9494E7">
 
-
+    <!-- Email / Username -->
     <EditText
         android:id="@+id/etUsername"
         android:layout_width="match_parent"
@@ -16,11 +16,13 @@
         android:background="@drawable/edittext_background"
         android:drawableStart="@drawable/acc"
         android:drawablePadding="10dp"
-        android:hint="Username"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
         android:padding="12dp"
         android:textColor="#FF000000"
         android:textColorHint="#FF000000" />
 
+    <!-- Password -->
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
@@ -35,13 +37,7 @@
         android:textColor="#FF000000"
         android:textColorHint="#FF000000" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="24dp">
-    </LinearLayout>
-
+    <!-- Login Button -->
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
@@ -50,15 +46,27 @@
         android:textAllCaps="true"
         android:textColor="#FFFFFF"
         android:background="@drawable/btn_gradient"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp" />
 
+    <!-- Register Button -->
+    <Button
+        android:id="@+id/btnRegister"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="REGISTER"
+        android:textAllCaps="true"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/btn_gradient"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Forgot Password -->
     <TextView
         android:id="@+id/tvForgotPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Forget Password"
-        android:textColor="#888"
+        android:text="Forgot Password?"
+        android:textColor="#FFFFFF"
         android:textStyle="bold"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center" />
 
 </LinearLayout>

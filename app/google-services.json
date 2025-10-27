@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "951393084960",
+    "project_id": "traveltree-navinest",
+    "storage_bucket": "traveltree-navinest.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:951393084960:android:b00b1e9481e62a7bd2fe45",
+        "android_client_info": {
+          "package_name": "com.example.learningcultureone"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGObm60EpZNiVYkKdX8_xlgKuHTFt3uYM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
