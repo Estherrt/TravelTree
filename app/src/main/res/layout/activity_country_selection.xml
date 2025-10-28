@@ -1,48 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
-    android:gravity="center"
     android:background="#E6E6FA">
 
-    <!-- Title -->
-    <TextView
-        android:id="@+id/textTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Select Your Country"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:textColor="#4B0082"
-        android:layout_marginBottom="24dp"
-        android:contentDescription="Screen title: Select your country" />
+    <!-- Scrollable Content Section -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="24dp"
+        android:fillViewport="true">
 
-    <!-- Country Selection Spinner -->
-    <Spinner
-        android:id="@+id/spinnerCountry"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/textTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select Your Country"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="#4B0082"
+                android:layout_marginBottom="24dp"
+                android:contentDescription="Screen title: Select your country" />
+
+            <!-- Country Selection Spinner -->
+            <Spinner
+                android:id="@+id/spinnerCountry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:background="@drawable/rounded_edittext"
+                android:padding="12dp"
+                android:layout_marginBottom="24dp"
+                android:contentDescription="Select country from list" />
+
+            <!-- Next Button -->
+            <Button
+                android:id="@+id/btnNext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Next"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#4B0082"
+                android:padding="12dp"
+                android:layout_marginTop="8dp"
+                android:contentDescription="Proceed to next screen" />
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:background="@drawable/rounded_edittext"
-        android:padding="12dp"
-        android:layout_marginBottom="24dp"
-        android:contentDescription="Select country from list" />
-
-    <!-- Next Button -->
-    <Button
-        android:id="@+id/btnNext"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Next"
-        android:textAllCaps="false"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF"
-        android:backgroundTint="#4B0082"
-        android:padding="12dp"
-        android:layout_marginTop="8dp"
-        android:contentDescription="Proceed to next screen" />
+        android:layout_gravity="bottom"
+        android:background="#FFFFFF"
+        app:itemIconTint="@color/nav_item_color"
+        app:itemTextColor="@color/nav_item_color"
+        app:menu="@menu/bottom_nav_menu"
+        android:contentDescription="Bottom navigation bar" />
 
 </LinearLayout>
