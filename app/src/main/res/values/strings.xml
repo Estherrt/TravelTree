@@ -12,6 +12,9 @@
     <string name="menu_button_desc">Open navigation menu</string>
     <string name="back_button_desc">Go back</string>
 
+    <string name="hello_user">Hello, User!</string>
+    <string name="your_progress_title">Your progress for %s:</string>
+    <string name="no_country_selected">No country selected. Please select one from Home.</string>
 
     <string-array name="country_list">
         <item>Argentina</item>

@@ -8,6 +8,7 @@ import android.widget.Spinner
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions // Import SetOptions
 
 class CountrySelectionActivity : BaseActivity() {
 
@@ -57,10 +58,10 @@ class CountrySelectionActivity : BaseActivity() {
                 return@setOnClickListener
             }
 
-            // Save selection to Firestore
-            val data = hashMapOf("country" to selectedCountry)
+            // Save selection to Firestore with the correct field name and using merge
+            val data = hashMapOf("selectedCountry" to selectedCountry) // <<< KEY CHANGE HERE
             db.collection("users").document(userId)
-                .set(data)
+                .set(data, SetOptions.merge()) // <<< Using merge() to avoid overwriting other user data
                 .addOnSuccessListener {
                     Toast.makeText(
                         this,

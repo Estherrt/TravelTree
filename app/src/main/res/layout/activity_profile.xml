@@ -19,18 +19,21 @@
             android:id="@+id/tvHello"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hello, User"
+            android:text="@string/hello_user"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
+            android:textColor="#000000"
+        android:layout_marginBottom="16dp" />
 
         <TextView
             android:id="@+id/tvProgressTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Your progress in each country:"
+            android:text="@string/your_progress_title"
             android:textSize="16sp"
-            android:layout_marginBottom="16dp" />
+            android:textColor="#000000"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone" /> <!-- Initially hidden -->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCountryProgress"
@@ -38,14 +41,8 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <Button
-            android:id="@+id/btnLogout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Logout"
-            android:backgroundTint="#4B0082"
-            android:textColor="#FFFFFF"
-            android:layout_marginTop="16dp" />
+        <!-- btnLogout REMOVED from here, as per your request -->
+
     </LinearLayout>
 
     <!-- Bottom Navigation Bar -->
@@ -56,7 +53,7 @@
         android:layout_alignParentBottom="true"
         app:menu="@menu/bottom_nav_menu"
         android:background="#FFFFFF"
-        app:itemIconTint="@color/black"
-        app:itemTextColor="@color/black" />
+        app:itemIconTint="@color/nav_item_color"
+        app:itemTextColor="@color/nav_item_color" />
 
 </RelativeLayout>
