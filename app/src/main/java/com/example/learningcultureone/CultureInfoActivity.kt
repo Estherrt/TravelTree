@@ -1,16 +1,15 @@
 package com.example.learningcultureone
 
+import android.app.AlertDialog
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
-import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
-import com.airbnb.lottie.LottieAnimationView
-import android.app.AlertDialog
-import java.util.*
-import android.media.MediaPlayer
 import android.view.View
+import android.widget.*
+import com.airbnb.lottie.LottieAnimationView
+import java.util.*
 
-class CultureInfoActivity : AppCompatActivity() {
+class CultureInfoActivity : BaseActivity() {
 
     private lateinit var lottieSeed: LottieAnimationView
     private lateinit var lottieCharacter: LottieAnimationView
@@ -22,14 +21,14 @@ class CultureInfoActivity : AppCompatActivity() {
     private lateinit var readAloudButton: Button
     private lateinit var pageIndicator: TextView
     private lateinit var tts: TextToSpeech
-
     private var popperMediaPlayer: MediaPlayer? = null
 
+    // Dialogue lines for the learning module
     private val dialogueLines = listOf(
         "The culture of the UAE is a rich blend of Arabian, Islamic, and Persian influences, with strong traditions of hospitality, family, and respect. It's a society that values both its deep-rooted heritage and its modern, cosmopolitan outlook.",
-        "Key Aspects of Emirati Culture:\n-Family and Community:\nFamily is central to Emirati life, and strong social bonds are maintained through frequent gatherings and celebrations.\n-Hospitality:\nExtremely warm and welcoming, Emiratis are known for their generosity and hospitality, often offering guests Arabic coffee (gahwa) and dates.",
-        "-Respect:\nRespect for elders and authority figures is deeply ingrained in the culture.\n-Islamic Values:\nIslam is the predominant religion, influencing various aspects of life, including architecture, attire, and social customs.",
-        "-Traditional Arts and Crafts:\nEmirati culture boasts a vibrant arts scene, with traditional crafts like calligraphy, henna, weaving (Sadu), and perfumery.\n-Traditional Sports:\nFalconry, camel racing, and dhow racing are important cultural practices that continue to be enjoyed."
+        "Key Aspects of Emirati Culture:\n\n• Family and Community:\nFamily is central to Emirati life, and strong social bonds are maintained through frequent gatherings and celebrations.\n\n• Hospitality:\nEmiratis are known for their generosity, often offering guests Arabic coffee (gahwa) and dates.",
+        "• Respect:\nRespect for elders and authority figures is deeply ingrained in the culture.\n\n• Islamic Values:\nIslam is the predominant religion, influencing architecture, attire, and customs.",
+        "• Traditional Arts and Crafts:\nEmirati culture features vibrant calligraphy, henna, weaving (Sadu), and perfumery.\n\n• Traditional Sports:\nFalconry, camel racing, and dhow racing remain key cultural practices."
     )
 
     private val forwardStages = listOf(0.0f, 0.11f, 0.22f, 0.33f)
@@ -37,9 +36,11 @@ class CultureInfoActivity : AppCompatActivity() {
     private var previousIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        supportActionBar?.hide()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_culture_info)
+
+        // Initialize bottom navigation for this screen
+        setupBottomNavigation(R.id.navigation_home)
 
         // Find views
         lottieSeed = findViewById(R.id.lottie_seed)
@@ -52,31 +53,33 @@ class CultureInfoActivity : AppCompatActivity() {
         readAloudButton = findViewById(R.id.btn_read_aloud)
         pageIndicator = findViewById(R.id.page_indicator)
 
-        // TTS Initialization
+        // Initialize Text-To-Speech
         tts = TextToSpeech(this) { status ->
-            if (status != TextToSpeech.ERROR) {
+            if (status == TextToSpeech.SUCCESS) {
                 tts.language = Locale.US
+            } else {
+                Toast.makeText(this, "TTS initialization failed", Toast.LENGTH_SHORT).show()
             }
         }
 
+        // Display the first dialogue
         updateUI()
 
+        // Next button
         nextButton.setOnClickListener {
-            stopTTS() // stop any speaking
-
+            stopTTS()
             if (currentIndex < dialogueLines.size - 1) {
                 previousIndex = currentIndex
                 currentIndex++
                 updateUI()
-            } else if (currentIndex == dialogueLines.size - 1) {
-                // When 'Done' clicked
-                playPopperAnimationAndSound() // triggers popper, sound, and popup AFTER popper finishes
+            } else {
+                playPopperAnimationAndSound()
             }
         }
 
+        // Previous button
         prevButton.setOnClickListener {
-            stopTTS() // stop any speaking
-
+            stopTTS()
             if (currentIndex > 0) {
                 previousIndex = currentIndex
                 currentIndex--
@@ -84,90 +87,89 @@ class CultureInfoActivity : AppCompatActivity() {
             }
         }
 
+        // Back button
         backButton.setOnClickListener {
             stopTTS()
             finish()
         }
 
+        // Read aloud button
         readAloudButton.setOnClickListener {
-            stopTTS() // stop any ongoing TTS before speaking new text
-            tts.speak(dialogueLines[currentIndex], TextToSpeech.QUEUE_FLUSH, null, null)
+            stopTTS()
+            val text = dialogueLines[currentIndex]
+            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null)
         }
     }
 
+    /**
+     * Updates dialogue and animation state
+     */
     private fun updateUI() {
         dialogueBox.text = dialogueLines[currentIndex]
 
         // Page indicator dots
-        val indicators = List(dialogueLines.size) { index ->
+        pageIndicator.text = dialogueLines.indices.joinToString(" ") { index ->
             if (index == currentIndex) "●" else "○"
         }
-        pageIndicator.text = indicators.joinToString(" ")
 
-        // Lottie Seed animation control
+        // Animate tree growth (forward/backward)
         if (currentIndex > previousIndex) {
-            val startProgress = forwardStages[previousIndex]
-            val endProgress = forwardStages[currentIndex]
-            lottieSeed.setMinAndMaxProgress(startProgress, endProgress)
+            lottieSeed.setMinAndMaxProgress(forwardStages[previousIndex], forwardStages[currentIndex])
             lottieSeed.speed = 1f
         } else if (currentIndex < previousIndex) {
-            val startProgress = forwardStages[currentIndex]
-            val endProgress = forwardStages[previousIndex]
-            lottieSeed.setMinAndMaxProgress(startProgress, endProgress)
+            lottieSeed.setMinAndMaxProgress(forwardStages[currentIndex], forwardStages[previousIndex])
             lottieSeed.speed = -1f
-        } else {
-            val progress = forwardStages[currentIndex]
-            lottieSeed.setMinAndMaxProgress(progress, progress)
-            lottieSeed.speed = 0f
         }
-
         lottieSeed.playAnimation()
 
-        // Enable/Disable Prev button
+        // Update button states
         prevButton.isEnabled = currentIndex != 0
-
-        // Change "Next" button to "Done" on last page
         nextButton.text = if (currentIndex == dialogueLines.size - 1) "Done" else "Next"
     }
 
+    /**
+     * Plays confetti animation and success sound when lesson completes
+     */
     private fun playPopperAnimationAndSound() {
         lottiePopper.visibility = View.VISIBLE
         lottiePopper.playAnimation()
 
-        // Play popper sound
         popperMediaPlayer = MediaPlayer.create(this, R.raw.success)
         popperMediaPlayer?.start()
 
-        // Show popup ONLY AFTER popper animation finishes
         lottiePopper.addLottieOnCompositionLoadedListener { composition ->
-            val duration = composition.duration.toLong() // duration in milliseconds
+            val duration = composition.duration.toLong()
             lottiePopper.postDelayed({
                 lottiePopper.visibility = View.GONE
                 popperMediaPlayer?.release()
                 popperMediaPlayer = null
-                showCompletionPopup() // Now popup comes AFTER popper finishes
+                showCompletionPopup()
             }, duration)
         }
 
-        // Release MediaPlayer after sound ends
         popperMediaPlayer?.setOnCompletionListener {
             it.release()
             popperMediaPlayer = null
         }
     }
 
+    /**
+     * Shows completion popup when user finishes all dialogues
+     */
     private fun showCompletionPopup() {
         AlertDialog.Builder(this)
-            .setTitle("Congratulations!")
+            .setTitle("🎉 Congratulations!")
             .setMessage("You've completed the culture learning session!")
+            .setCancelable(false)
             .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
             .show()
     }
 
+    /**
+     * Stops TTS safely
+     */
     private fun stopTTS() {
-        if (tts.isSpeaking) {
-            tts.stop()
-        }
+        if (tts.isSpeaking) tts.stop()
     }
 
     override fun onDestroy() {

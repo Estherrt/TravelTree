@@ -7,6 +7,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#E6E6FA"
     tools:context=".TravelreqInfoActivity">
 
     <!-- Full Screen Animated Background -->
@@ -23,33 +24,38 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Back Button (slightly lowered) -->
+    <!-- Back Button -->
     <ImageView
         android:id="@+id/btn_back"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="60dp"
         android:layout_marginStart="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Back"
         android:src="@drawable/ic_back_arrow"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- Dialogue Box with rounded background and bg color -->
+    <!-- Dialogue Box -->
     <TextView
         android:id="@+id/dialogue_box"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="180dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="150dp"
         android:background="@drawable/rounded_background"
-        android:padding="18dp"
-        android:textColor="#000000"
+        android:elevation="8dp"
+        android:padding="20dp"
+        android:text="Travel requirements info will appear here..."
+        android:textAlignment="textStart"
+        android:textColor="#1A1A1A"
         android:textSize="16sp"
-        android:elevation="4dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="HardcodedText" />
 
     <!-- Page Indicator -->
     <TextView
@@ -57,34 +63,39 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="● ○ ○ ○"
-        android:textColor="@android:color/white"
+        android:textColor="#4B0082"
         android:textSize="18sp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintTop_toBottomOf="@id/dialogue_box"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="HardcodedText" />
 
-    <!-- Read-Aloud Button -->
+    <!-- Read Aloud Button -->
     <Button
         android:id="@+id/btn_read_aloud"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="🔊 Listen"
+        android:layout_marginTop="10dp"
         android:background="@drawable/rounded_button"
-        android:textColor="#FFFFFF"
-        android:padding="10dp"
+        android:contentDescription="Read aloud current travel requirements"
         android:elevation="6dp"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp"
+        android:text="🔊 Listen"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
         app:layout_constraintTop_toBottomOf="@id/page_indicator"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
+        tools:ignore="HardcodedText" />
 
     <!-- Character Animation -->
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottie_character"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         app:layout_constraintTop_toBottomOf="@id/btn_read_aloud"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -92,18 +103,18 @@
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/travelreq" />
 
-    <!-- Plant Animation -->
+    <!-- Plant Growth Animation -->
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottie_seed"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        app:layout_constraintBottom_toTopOf="@id/btn_next"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="40dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="45dp"
         app:lottie_autoPlay="false"
         app:lottie_loop="false"
-        app:lottie_rawRes="@raw/plantgrowing" />
+        app:lottie_rawRes="@raw/plantgrowing"
+        app:layout_constraintBottom_toTopOf="@id/btn_next"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Previous Button -->
     <Button
@@ -113,12 +124,15 @@
         android:text="Previous"
         android:background="@drawable/rounded_button"
         android:textColor="#FFFFFF"
-        android:padding="10dp"
+        android:textSize="15sp"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp"
         android:elevation="6dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="35dp"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="35dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="HardcodedText" />
 
     <!-- Next Button -->
     <Button
@@ -128,14 +142,17 @@
         android:text="Next"
         android:background="@drawable/rounded_button"
         android:textColor="#FFFFFF"
-        android:padding="10dp"
+        android:textSize="15sp"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp"
         android:elevation="6dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="35dp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="35dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="HardcodedText" />
 
-    <!-- Popper Animation FULL SCREEN & ON TOP -->
+    <!-- Celebration Popper Animation -->
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottie_popper"
         android:layout_width="0dp"

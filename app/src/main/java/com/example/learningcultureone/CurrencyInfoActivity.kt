@@ -1,16 +1,15 @@
 package com.example.learningcultureone
 
+import android.app.AlertDialog
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
-import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
-import com.airbnb.lottie.LottieAnimationView
-import android.app.AlertDialog
-import java.util.*
-import android.media.MediaPlayer
 import android.view.View
+import android.widget.*
+import com.airbnb.lottie.LottieAnimationView
+import java.util.*
 
-class CurrencyInfoActivity : AppCompatActivity() {
+class CurrencyInfoActivity : BaseActivity() {
 
     private lateinit var lottieSeed: LottieAnimationView
     private lateinit var lottieCharacter: LottieAnimationView
@@ -25,23 +24,33 @@ class CurrencyInfoActivity : AppCompatActivity() {
 
     private var popperMediaPlayer: MediaPlayer? = null
 
+    // Currency info dialogues
     private val dialogueLines = listOf(
         "The official currency of the United Arab Emirates is the United Arab Emirates Dirham (AED). It is issued and regulated by the Central Bank of the UAE.",
-        "Subdivision: 1 dirham = 100 fils.\n" +"\n" +"Coins: Commonly used coins include 1, 5, 10, 25, and 50 fils, as well as a 1 dirham coin.\n" + "\n" + "Banknotes: Denominations available are 5, 10, 20, 50, 100, 200, 500, and 1000 dirhams.",
-        "The UAE Dirham (AED) is pegged to the US Dollar, which helps maintain its stability against other currencies. Currently, 1 Dirham is approximately equal to 23.60 Indian Rupees (INR). This stable rate benefits trade and remittances between the UAE and India, two countries with strong economic ties.",
-        "The UAE Dirham banknotes feature iconic landmarks and cultural symbols that reflect the nation's heritage. Images include the Burj Khalifa, showcasing Dubai’s architectural marvel, and the traditional dhow boats representing the country’s maritime history. Other notes depict desert landscapes and historic forts, highlighting the UAE’s rich past. These visuals celebrate the blend of modernity and tradition that defines the UAE’s identity."
+        "Subdivision: 1 dirham = 100 fils.\n\nCoins: Commonly used coins include 1, 5, 10, 25, and 50 fils, as well as a 1 dirham coin.\n\nBanknotes: Denominations available are 5, 10, 20, 50, 100, 200, 500, and 1000 dirhams.",
+        "The UAE Dirham (AED) is pegged to the US Dollar, which helps maintain its stability against other currencies.\n\nCurrently, 1 Dirham is approximately equal to 23.60 Indian Rupees (INR). This stable rate benefits trade and remittances between the UAE and India, two countries with strong economic ties.",
+        "The UAE Dirham banknotes feature iconic landmarks and cultural symbols that reflect the nation's heritage.\n\nImages include the Burj Khalifa, showcasing Dubai’s architectural marvel, and the traditional dhow boats representing the country’s maritime history.\n\nThese visuals celebrate the blend of modernity and tradition that defines the UAE’s identity."
     )
 
+    // Seed growth animation stages
     private val forwardStages = listOf(0.0f, 0.11f, 0.22f, 0.33f)
     private var currentIndex = 0
     private var previousIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        supportActionBar?.hide()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_currency_info)
+        setupBottomNavigation(R.id.navigation_home) // Highlight correct tab
+        supportActionBar?.hide()
 
-        // Find views
+        initViews()
+        initTTS()
+        updateUI()
+        setupListeners()
+    }
+
+    // ----------------- Initialization -----------------
+    private fun initViews() {
         lottieSeed = findViewById(R.id.lottie_seed)
         lottieCharacter = findViewById(R.id.lottie_character)
         lottiePopper = findViewById(R.id.lottie_popper)
@@ -51,105 +60,99 @@ class CurrencyInfoActivity : AppCompatActivity() {
         backButton = findViewById(R.id.btn_back)
         readAloudButton = findViewById(R.id.btn_read_aloud)
         pageIndicator = findViewById(R.id.page_indicator)
+    }
 
-        // TTS Initialization
+    private fun initTTS() {
         tts = TextToSpeech(this) { status ->
             if (status != TextToSpeech.ERROR) {
                 tts.language = Locale.US
+                tts.setSpeechRate(1.0f)
+                tts.setPitch(1.0f)
             }
         }
+    }
 
-        updateUI()
+    // ----------------- UI and Navigation -----------------
+    private fun setupListeners() {
+        nextButton.setOnClickListener { onNextClicked() }
+        prevButton.setOnClickListener { onPrevClicked() }
+        backButton.setOnClickListener { finish() }
+        readAloudButton.setOnClickListener { speakCurrentLine() }
+    }
 
-        nextButton.setOnClickListener {
-            stopTTS() // stop any speaking
-
-            if (currentIndex < dialogueLines.size - 1) {
-                previousIndex = currentIndex
-                currentIndex++
-                updateUI()
-            } else if (currentIndex == dialogueLines.size - 1) {
-                // When 'Done' clicked
-                playPopperAnimationAndSound() // triggers popper, sound, and popup AFTER popper finishes
-            }
+    private fun onNextClicked() {
+        stopTTS()
+        if (currentIndex < dialogueLines.size - 1) {
+            previousIndex = currentIndex
+            currentIndex++
+            updateUI()
+        } else {
+            playPopperAnimationAndSound()
         }
+    }
 
-        prevButton.setOnClickListener {
-            stopTTS() // stop any speaking
-
-            if (currentIndex > 0) {
-                previousIndex = currentIndex
-                currentIndex--
-                updateUI()
-            }
+    private fun onPrevClicked() {
+        stopTTS()
+        if (currentIndex > 0) {
+            previousIndex = currentIndex
+            currentIndex--
+            updateUI()
         }
+    }
 
-        backButton.setOnClickListener {
-            stopTTS()
-            finish()
-        }
-
-        readAloudButton.setOnClickListener {
-            stopTTS() // stop any ongoing TTS before speaking new text
-            tts.speak(dialogueLines[currentIndex], TextToSpeech.QUEUE_FLUSH, null, null)
-        }
+    private fun speakCurrentLine() {
+        stopTTS()
+        tts.speak(dialogueLines[currentIndex], TextToSpeech.QUEUE_FLUSH, null, null)
     }
 
     private fun updateUI() {
         dialogueBox.text = dialogueLines[currentIndex]
 
-        // Page indicator dots
-        val indicators = List(dialogueLines.size) { index ->
-            if (index == currentIndex) "●" else "○"
-        }
-        pageIndicator.text = indicators.joinToString(" ")
-
-        // Lottie Seed animation control
-        if (currentIndex > previousIndex) {
-            val startProgress = forwardStages[previousIndex]
-            val endProgress = forwardStages[currentIndex]
-            lottieSeed.setMinAndMaxProgress(startProgress, endProgress)
-            lottieSeed.speed = 1f
-        } else if (currentIndex < previousIndex) {
-            val startProgress = forwardStages[currentIndex]
-            val endProgress = forwardStages[previousIndex]
-            lottieSeed.setMinAndMaxProgress(startProgress, endProgress)
-            lottieSeed.speed = -1f
-        } else {
-            val progress = forwardStages[currentIndex]
-            lottieSeed.setMinAndMaxProgress(progress, progress)
-            lottieSeed.speed = 0f
+        // Update page indicator
+        pageIndicator.text = dialogueLines.indices.joinToString(" ") {
+            if (it == currentIndex) "●" else "○"
         }
 
+        // Animate plant growth
+        when {
+            currentIndex > previousIndex -> {
+                lottieSeed.setMinAndMaxProgress(forwardStages[previousIndex], forwardStages[currentIndex])
+                lottieSeed.speed = 1f
+            }
+            currentIndex < previousIndex -> {
+                lottieSeed.setMinAndMaxProgress(forwardStages[currentIndex], forwardStages[previousIndex])
+                lottieSeed.speed = -1f
+            }
+            else -> {
+                lottieSeed.setMinAndMaxProgress(forwardStages[currentIndex], forwardStages[currentIndex])
+                lottieSeed.speed = 0f
+            }
+        }
         lottieSeed.playAnimation()
 
-        // Enable/Disable Prev button
+        // Button state updates
         prevButton.isEnabled = currentIndex != 0
-
-        // Change "Next" button to "Done" on last page
         nextButton.text = if (currentIndex == dialogueLines.size - 1) "Done" else "Next"
     }
 
+    // ----------------- Popper Animation -----------------
     private fun playPopperAnimationAndSound() {
         lottiePopper.visibility = View.VISIBLE
         lottiePopper.playAnimation()
 
-        // Play popper sound
         popperMediaPlayer = MediaPlayer.create(this, R.raw.success)
         popperMediaPlayer?.start()
 
-        // Show popup ONLY AFTER popper animation finishes
         lottiePopper.addLottieOnCompositionLoadedListener { composition ->
-            val duration = composition.duration.toLong() // duration in milliseconds
+            val duration = composition.duration.toLong()
             lottiePopper.postDelayed({
                 lottiePopper.visibility = View.GONE
                 popperMediaPlayer?.release()
                 popperMediaPlayer = null
-                showCompletionPopup() // Now popup comes AFTER popper finishes
+                showCompletionPopup()
             }, duration)
         }
 
-        // Release MediaPlayer after sound ends
         popperMediaPlayer?.setOnCompletionListener {
             it.release()
             popperMediaPlayer = null
@@ -158,16 +161,18 @@ class CurrencyInfoActivity : AppCompatActivity() {
 
     private fun showCompletionPopup() {
         AlertDialog.Builder(this)
-            .setTitle("Congratulations!")
-            .setMessage("You've completed the currency learning session!")
-            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+            .setTitle("🎉 Congratulations!")
+            .setMessage("You've completed the UAE currency learning session!")
+            .setCancelable(false)
+            .setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+            }
             .show()
     }
 
+    // ----------------- Utility -----------------
     private fun stopTTS() {
-        if (tts.isSpeaking) {
-            tts.stop()
-        }
+        if (tts.isSpeaking) tts.stop()
     }
 
     override fun onDestroy() {
@@ -178,5 +183,3 @@ class CurrencyInfoActivity : AppCompatActivity() {
         super.onDestroy()
     }
 }
-
-

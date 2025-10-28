@@ -7,11 +7,10 @@ import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.view.View
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.lottie.LottieAnimationView
 import java.util.*
 
-class GreetingsActivity : AppCompatActivity() {
+class GreetingsActivity : BaseActivity() {
 
     private lateinit var dialogueBox: TextView
     private lateinit var pageIndicator: TextView
@@ -48,6 +47,9 @@ class GreetingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_greetings)
 
+        // Setup bottom navigation from BaseActivity
+        setupBottomNavigation(R.id.navigation_home)
+
         // View bindings
         dialogueBox = findViewById(R.id.dialogue_box)
         pageIndicator = findViewById(R.id.page_indicator)
@@ -80,7 +82,6 @@ class GreetingsActivity : AppCompatActivity() {
             tts.speak(pronunciation, TextToSpeech.QUEUE_FLUSH, null, null)
         }
 
-
         nextButton.setOnClickListener {
             if (currentIndex < greetings.lastIndex) {
                 currentIndex++
@@ -105,7 +106,7 @@ class GreetingsActivity : AppCompatActivity() {
             if (it == currentIndex) "●" else "○"
         }
 
-        // Progress calculation for Lottie animation (forward only)
+        // Progress animation for the seed
         val stepSize = 1f / greetings.size
         val start = currentIndex * stepSize
         val end = (currentIndex + 1) * stepSize
@@ -137,7 +138,7 @@ class GreetingsActivity : AppCompatActivity() {
 
     private fun showPopup() {
         AlertDialog.Builder(this)
-            .setTitle("Congratulations!")
+            .setTitle("🎉 Congratulations!")
             .setMessage("You've completed the greetings learning session!")
             .setPositiveButton("OK") { dialog, _ ->
                 markLevelAsCompleted()

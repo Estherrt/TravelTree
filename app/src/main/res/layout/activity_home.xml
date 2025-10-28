@@ -1,105 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/drawerLayout"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Sidebar Drawer -->
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navView"
-        android:layout_width="280dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="end"
-        app:headerLayout="@layout/nav_header"
-        app:menu="@menu/nav_menu" />
-
-    <!-- Main Content -->
-    <FrameLayout
+    <!-- Content area (scrollable) -->
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="24dp"
+        android:background="#E6E6FA">
 
-        <!-- Lottie Background -->
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/lottie_home_background"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            app:lottie_rawRes="@raw/bg" />
-
-        <!-- Back Button -->
-        <ImageButton
-            android:id="@+id/backButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_margin="16dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_back_arrow"
-            android:contentDescription="@string/back_button_desc"
-            app:tint="@android:color/white"/>
-
-        <!-- Menu Button -->
-        <ImageButton
-            android:id="@+id/menuBtn"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_menu"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/menu_button_desc"
-            android:layout_gravity="end|top" />
-
-
-
-        <!-- Tree Animation -->
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/treeAnimation"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="90dp"
-            android:layout_gravity="center_horizontal"
-            app:lottie_autoPlay="false"
-            app:lottie_loop="false"
-            app:lottie_rawRes="@raw/tree_growth"/>
-
-        <!-- Button Container -->
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="240dp"
-            android:gravity="center_horizontal"
-            android:padding="16dp">
+            android:gravity="center_horizontal">
 
+            <!-- Tree Animation -->
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/treeAnimation"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                app:lottie_autoPlay="false"
+                app:lottie_loop="false"
+                app:lottie_rawRes="@raw/tree_growth"
+                android:layout_gravity="center"
+                android:layout_marginBottom="24dp"
+                android:contentDescription="Tree growth progress animation" />
+
+            <!-- Module Buttons -->
             <Button
                 android:id="@+id/btnCulture"
-                style="@style/GameButton"
-                android:text="Culture"/>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Culture"
+                android:backgroundTint="#4B0082"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="8dp"
+                android:contentDescription="Learn about local culture" />
 
             <Button
                 android:id="@+id/btnCurrency"
-                style="@style/GameButton"
-                android:text="Currency"/>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Currency"
+                android:backgroundTint="#4B0082"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="8dp"
+                android:contentDescription="Learn about currency" />
 
             <Button
                 android:id="@+id/btnEmergency"
-                style="@style/GameButton"
-                android:text="Emergency"/>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Emergency"
+                android:backgroundTint="#4B0082"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="8dp"
+                android:contentDescription="View emergency information" />
 
             <Button
                 android:id="@+id/btnTravel"
-                style="@style/GameButton"
-                android:text="Travel"/>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Travel Requirements"
+                android:backgroundTint="#4B0082"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="8dp"
+                android:contentDescription="View travel requirement details" />
 
             <Button
                 android:id="@+id/btnGreetings"
-                style="@style/GameButton"
-                android:text="Greetings"/>
-
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Greetings"
+                android:backgroundTint="#4B0082"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="8dp"
+                android:contentDescription="Learn common greetings" />
         </LinearLayout>
-    </FrameLayout>
-</androidx.drawerlayout.widget.DrawerLayout>
+    </ScrollView>
+
+    <!-- Bottom Navigation handled via BaseActivity -->
+    <include layout="@layout/bottom_nav" />
+
+</LinearLayout>

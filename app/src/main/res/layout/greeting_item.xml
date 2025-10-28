@@ -1,19 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
     android:layout_marginBottom="12dp"
-    card_view:cardCornerRadius="12dp"
-    card_view:cardElevation="4dp">
+    android:layout_marginTop="4dp"
+    card_view:cardCornerRadius="16dp"
+    card_view:cardElevation="6dp"
+    card_view:cardBackgroundColor="#F3E5F5">
 
-    <TextView
-        android:id="@+id/tvGreeting"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:textSize="16sp"
-        android:textColor="#4E342E"
-        android:textStyle="bold"
-        android:text="Sample Text" />
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Arabic Phrase -->
+        <TextView
+            android:id="@+id/tvArabic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="السلام عليكم"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#4B0082"
+            android:layout_marginBottom="4dp" />
+
+        <!-- English Translation -->
+        <TextView
+            android:id="@+id/tvEnglish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Peace be upon you"
+            android:textSize="16sp"
+            android:textColor="#333333"
+            android:layout_marginBottom="2dp" />
+
+        <!-- Pronunciation -->
+        <TextView
+            android:id="@+id/tvPronunciation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Salam Alaikum"
+            android:textSize="14sp"
+            android:textColor="#666666"
+            android:fontFamily="sans-serif-medium" />
+
+    </LinearLayout>
+
 </androidx.cardview.widget.CardView>
