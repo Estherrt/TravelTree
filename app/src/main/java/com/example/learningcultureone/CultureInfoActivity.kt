@@ -21,6 +21,7 @@ class CultureInfoActivity : BaseActivity() {
     private lateinit var readAloudButton: Button
     private lateinit var pageIndicator: TextView
     private lateinit var tts: TextToSpeech
+
     private var popperMediaPlayer: MediaPlayer? = null
 
     // Dialogue lines for the learning module
@@ -31,6 +32,7 @@ class CultureInfoActivity : BaseActivity() {
         "• Traditional Arts and Crafts:\nEmirati culture features vibrant calligraphy, henna, weaving (Sadu), and perfumery.\n\n• Traditional Sports:\nFalconry, camel racing, and dhow racing remain key cultural practices."
     )
 
+    // Stages for Lottie plant animation
     private val forwardStages = listOf(0.0f, 0.11f, 0.22f, 0.33f)
     private var currentIndex = 0
     private var previousIndex = 0
@@ -39,10 +41,20 @@ class CultureInfoActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_culture_info)
 
-        // Initialize bottom navigation for this screen
-        setupBottomNavigation(R.id.navigation_home)
+        // ✅ Highlight bottom nav item (if you have one for this section)
+        setupBottomNavigation(R.id.navigation_home) // Or the appropriate nav_item_id for Culture
+        supportActionBar?.hide() // Hide action bar for full-screen experience
 
-        // Find views
+        initViews()
+        initTTS()
+        updateUI() // Display initial UI state
+        setClickListeners() // Setup all button click listeners
+    }
+
+    // ----------------- Initialization -----------------
+
+    /** Initialize all views **/
+    private fun initViews() {
         lottieSeed = findViewById(R.id.lottie_seed)
         lottieCharacter = findViewById(R.id.lottie_character)
         lottiePopper = findViewById(R.id.lottie_popper)
@@ -52,129 +64,144 @@ class CultureInfoActivity : BaseActivity() {
         backButton = findViewById(R.id.btn_back)
         readAloudButton = findViewById(R.id.btn_read_aloud)
         pageIndicator = findViewById(R.id.page_indicator)
+    }
 
-        // Initialize Text-To-Speech
+    /** Initialize Text-to-Speech **/
+    private fun initTTS() {
         tts = TextToSpeech(this) { status ->
             if (status == TextToSpeech.SUCCESS) {
                 tts.language = Locale.US
+                tts.setSpeechRate(1.0f)
+                tts.setPitch(1.0f)
             } else {
                 Toast.makeText(this, "TTS initialization failed", Toast.LENGTH_SHORT).show()
             }
         }
+    }
 
-        // Display the first dialogue
-        updateUI()
+    // ----------------- UI and Navigation -----------------
 
-        // Next button
-        nextButton.setOnClickListener {
-            stopTTS()
-            if (currentIndex < dialogueLines.size - 1) {
-                previousIndex = currentIndex
-                currentIndex++
-                updateUI()
-            } else {
-                playPopperAnimationAndSound()
-            }
-        }
-
-        // Previous button
-        prevButton.setOnClickListener {
-            stopTTS()
-            if (currentIndex > 0) {
-                previousIndex = currentIndex
-                currentIndex--
-                updateUI()
-            }
-        }
-
-        // Back button
+    /** Set up button click listeners **/
+    private fun setClickListeners() {
+        nextButton.setOnClickListener { handleNext() }
+        prevButton.setOnClickListener { handlePrev() }
         backButton.setOnClickListener {
-            stopTTS()
+            stopTTS() // Stop TTS before leaving
             finish()
         }
+        readAloudButton.setOnClickListener { speakCurrentLine() }
+    }
 
-        // Read aloud button
-        readAloudButton.setOnClickListener {
-            stopTTS()
-            val text = dialogueLines[currentIndex]
-            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null)
+    /** Handle "Next" click **/
+    private fun handleNext() {
+        stopTTS()
+        if (currentIndex < dialogueLines.size - 1) {
+            previousIndex = currentIndex
+            currentIndex++
+            updateUI()
+        } else {
+            playPopperAnimationAndSound() // Play animation when finished
         }
     }
 
-    /**
-     * Updates dialogue and animation state
-     */
+    /** Handle "Previous" click **/
+    private fun handlePrev() {
+        stopTTS()
+        if (currentIndex > 0) {
+            previousIndex = currentIndex
+            currentIndex--
+            updateUI()
+        }
+    }
+
+    /** Speak current text using TTS **/
+    private fun speakCurrentLine() {
+        stopTTS()
+        val text = dialogueLines[currentIndex]
+        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null)
+    }
+
+    /** Update text, progress indicators, and animations **/
     private fun updateUI() {
         dialogueBox.text = dialogueLines[currentIndex]
 
-        // Page indicator dots
+        // Page dots
         pageIndicator.text = dialogueLines.indices.joinToString(" ") { index ->
             if (index == currentIndex) "●" else "○"
         }
 
-        // Animate tree growth (forward/backward)
+        // Animate the plant growth
         if (currentIndex > previousIndex) {
             lottieSeed.setMinAndMaxProgress(forwardStages[previousIndex], forwardStages[currentIndex])
             lottieSeed.speed = 1f
         } else if (currentIndex < previousIndex) {
             lottieSeed.setMinAndMaxProgress(forwardStages[currentIndex], forwardStages[previousIndex])
             lottieSeed.speed = -1f
+        } else {
+            // If currentIndex hasn't changed relative to previous, just set progress directly
+            lottieSeed.setMinAndMaxProgress(forwardStages[currentIndex], forwardStages[currentIndex])
+            lottieSeed.speed = 0f // No animation if start/end are same
         }
         lottieSeed.playAnimation()
 
-        // Update button states
-        prevButton.isEnabled = currentIndex != 0
+        // Button states
+        prevButton.isEnabled = currentIndex > 0
         nextButton.text = if (currentIndex == dialogueLines.size - 1) "Done" else "Next"
     }
 
-    /**
-     * Plays confetti animation and success sound when lesson completes
-     */
+    // ----------------- Popper Animation -----------------
+
+    /** Play celebration popper animation and sound **/
     private fun playPopperAnimationAndSound() {
         lottiePopper.visibility = View.VISIBLE
         lottiePopper.playAnimation()
 
-        popperMediaPlayer = MediaPlayer.create(this, R.raw.success)
+        popperMediaPlayer = MediaPlayer.create(this, R.raw.success) // Ensure R.raw.success exists
         popperMediaPlayer?.start()
 
+        // Hide animation and show popup when Lottie animation finishes
         lottiePopper.addLottieOnCompositionLoadedListener { composition ->
             val duration = composition.duration.toLong()
             lottiePopper.postDelayed({
                 lottiePopper.visibility = View.GONE
+                // Release MediaPlayer only after animation and sound are done
                 popperMediaPlayer?.release()
                 popperMediaPlayer = null
                 showCompletionPopup()
             }, duration)
         }
-
+        // Ensure MediaPlayer is released if animation finishes before Lottie callback
         popperMediaPlayer?.setOnCompletionListener {
             it.release()
             popperMediaPlayer = null
         }
     }
 
-    /**
-     * Shows completion popup when user finishes all dialogues
-     */
+    /** Shows completion popup when user finishes all dialogues **/
     private fun showCompletionPopup() {
         AlertDialog.Builder(this)
             .setTitle("🎉 Congratulations!")
             .setMessage("You've completed the culture learning session!")
-            .setCancelable(false)
             .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+            .setCancelable(false)
             .show()
     }
 
-    /**
-     * Stops TTS safely
-     */
+    // ----------------- Utility and Lifecycle -----------------
+
+    /** Stops TTS safely **/
     private fun stopTTS() {
-        if (tts.isSpeaking) tts.stop()
+        if (::tts.isInitialized && tts.isSpeaking) {
+            tts.stop()
+        }
     }
 
+    /** Clean up resources when activity is destroyed **/
     override fun onDestroy() {
         stopTTS()
-        tts.shutdown()
+        if (::tts.isInitialized) {
+            tts.shutdown()
+        }
         popperMediaPlayer?.release()
         popperMediaPlayer = null
         super.onDestroy()

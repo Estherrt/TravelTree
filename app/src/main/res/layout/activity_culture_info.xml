@@ -27,16 +27,21 @@
     <ImageView
         android:id="@+id/btn_back"
         android:layout_width="48dp"
-    android:layout_height="48dp"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="50dp"
-    android:background="@drawable/rounded_button"
-    android:padding="6dp"
-    android:src="@drawable/ic_back_arrow"
-    android:contentDescription="Back"
-    app:tint="#4B0082"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintStart_toStartOf="parent" />
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="50dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Go Back"
+        android:src="@drawable/ic_back_arrow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+<!--    android:background="@drawable/rounded_button"-->
+<!--    android:padding="6dp"-->
+<!--    android:src="@drawable/ic_back_arrow"-->
+<!--    android:contentDescription="Back"-->
+<!--    app:tint="#4B0082"-->
+<!--    app:layout_constraintTop_toTopOf="parent"-->
+<!--    app:layout_constraintStart_toStartOf="parent" />-->
 
     <!-- Dialogue Box -->
     <TextView
@@ -106,13 +111,13 @@
         android:id="@+id/lottie_seed"
         android:layout_width="120dp"
         android:layout_height="120dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-    app:lottie_autoPlay="false"
-    app:lottie_loop="false"
-    app:lottie_rawRes="@raw/plantgrowing"
-    app:layout_constraintBottom_toTopOf="@id/btn_prev"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent" />
+        app:lottie_autoPlay="false"
+        app:lottie_loop="false"
+        app:lottie_rawRes="@raw/plantgrowing"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_next" />
 
     <!-- Previous Button -->
     <Button
