@@ -32,7 +32,6 @@ class EmergencyInfoActivity : BaseActivity() {
         "Coast Guard: 996 — For maritime emergencies.\n\nCivil Defence: 997 — Handles various civil emergencies including fires and disasters.\n\nTraffic Accidents: 901 — For reporting road accidents."
     )
 
-    // Stages for Lottie plant animation
     private val forwardStages = listOf(0.0f, 0.11f, 0.22f, 0.33f)
     private var currentIndex = 0
     private var previousIndex = 0
@@ -41,7 +40,6 @@ class EmergencyInfoActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_emergency_info)
 
-        // ✅ Highlight bottom nav item (if you have one for this section)
         setupBottomNavigation(R.id.navigation_home)
 
         supportActionBar?.hide()
@@ -52,7 +50,6 @@ class EmergencyInfoActivity : BaseActivity() {
         setClickListeners()
     }
 
-    /** Initialize all views **/
     private fun initViews() {
         lottieSeed = findViewById(R.id.lottie_seed)
         lottieCharacter = findViewById(R.id.lottie_character)
@@ -65,7 +62,6 @@ class EmergencyInfoActivity : BaseActivity() {
         pageIndicator = findViewById(R.id.page_indicator)
     }
 
-    /** Initialize Text-to-Speech **/
     private fun initTTS() {
         tts = TextToSpeech(this) { status ->
             if (status == TextToSpeech.SUCCESS) {
@@ -75,7 +71,6 @@ class EmergencyInfoActivity : BaseActivity() {
         }
     }
 
-    /** Set up button click listeners **/
     private fun setClickListeners() {
         nextButton.setOnClickListener { handleNext() }
         prevButton.setOnClickListener { handlePrev() }
@@ -86,7 +81,6 @@ class EmergencyInfoActivity : BaseActivity() {
         readAloudButton.setOnClickListener { speakCurrentLine() }
     }
 
-    /** Handle "Next" click **/
     private fun handleNext() {
         stopTTS()
         if (currentIndex < dialogueLines.size - 1) {
@@ -98,7 +92,6 @@ class EmergencyInfoActivity : BaseActivity() {
         }
     }
 
-    /** Handle "Previous" click **/
     private fun handlePrev() {
         stopTTS()
         if (currentIndex > 0) {
@@ -108,23 +101,19 @@ class EmergencyInfoActivity : BaseActivity() {
         }
     }
 
-    /** Speak current text using TTS **/
     private fun speakCurrentLine() {
         stopTTS()
         val text = dialogueLines[currentIndex]
         tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null)
     }
 
-    /** Update text, progress indicators, and animations **/
     private fun updateUI() {
         dialogueBox.text = dialogueLines[currentIndex]
 
-        // Page dots
         pageIndicator.text = dialogueLines.indices.joinToString(" ") { index ->
             if (index == currentIndex) "●" else "○"
         }
 
-        // Animate the plant
         if (currentIndex > previousIndex) {
             lottieSeed.setMinAndMaxProgress(forwardStages[previousIndex], forwardStages[currentIndex])
             lottieSeed.speed = 1f
@@ -137,12 +126,10 @@ class EmergencyInfoActivity : BaseActivity() {
         }
         lottieSeed.playAnimation()
 
-        // Button states
         prevButton.isEnabled = currentIndex > 0
         nextButton.text = if (currentIndex == dialogueLines.size - 1) "Done" else "Next"
     }
 
-    /** Play celebration popper animation and sound **/
     private fun playPopperAnimationAndSound() {
         lottiePopper.visibility = View.VISIBLE
         lottiePopper.playAnimation()
@@ -150,7 +137,6 @@ class EmergencyInfoActivity : BaseActivity() {
         popperMediaPlayer = MediaPlayer.create(this, R.raw.success)
         popperMediaPlayer?.start()
 
-        // Hide animation when done
         lottiePopper.addLottieOnCompositionLoadedListener { composition ->
             val duration = composition.duration.toLong()
             lottiePopper.postDelayed({
@@ -167,7 +153,6 @@ class EmergencyInfoActivity : BaseActivity() {
         }
     }
 
-    /** Completion popup **/
     private fun showCompletionPopup() {
         AlertDialog.Builder(this)
             .setTitle("🎉 Congratulations!")
@@ -177,14 +162,12 @@ class EmergencyInfoActivity : BaseActivity() {
             .show()
     }
 
-    /** Stop TTS safely **/
     private fun stopTTS() {
         if (::tts.isInitialized && tts.isSpeaking) {
             tts.stop()
         }
     }
 
-    /** Clean up **/
     override fun onDestroy() {
         stopTTS()
         if (::tts.isInitialized) {

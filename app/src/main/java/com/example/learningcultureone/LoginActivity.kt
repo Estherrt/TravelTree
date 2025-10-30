@@ -30,11 +30,10 @@ class LoginActivity : AppCompatActivity() {
         etPassword = findViewById(R.id.etPassword)
         btnLogin = findViewById(R.id.btnLogin)
         tvRegister = findViewById(R.id.tvRegister)
-        ivPasswordToggle = findViewById(R.id.ivPasswordToggle) // Add this ImageView in XML next to password
+        ivPasswordToggle = findViewById(R.id.ivPasswordToggle)
 
         auth = FirebaseAuth.getInstance()
 
-        // Toggle password visibility
         ivPasswordToggle.setOnClickListener {
             isPasswordVisible = !isPasswordVisible
             if (isPasswordVisible) {
@@ -44,9 +43,9 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 etPassword.inputType =
                     InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-                ivPasswordToggle.setImageResource(R.drawable.ic_visibility) // icon for show
+                ivPasswordToggle.setImageResource(R.drawable.ic_visibility)
             }
-            etPassword.setSelection(etPassword.text.length) // move cursor to end
+            etPassword.setSelection(etPassword.text.length)
         }
 
         btnLogin.setOnClickListener {

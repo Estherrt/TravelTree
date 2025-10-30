@@ -8,7 +8,7 @@ import android.widget.Spinner
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions // Import SetOptions
+import com.google.firebase.firestore.SetOptions
 
 class CountrySelectionActivity : BaseActivity() {
 
@@ -21,14 +21,11 @@ class CountrySelectionActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_country_selection)
 
-        // ✅ Setup bottom navigation (Home tab active)
         setupBottomNavigation(R.id.navigation_home)
 
-        // Initialize views
         spinner = findViewById(R.id.spinnerCountry)
         btnNext = findViewById(R.id.btnNext)
 
-        // Firebase initialization
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
@@ -38,11 +35,9 @@ class CountrySelectionActivity : BaseActivity() {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
 
-        // Next button click
         btnNext.setOnClickListener {
             val selectedCountry = spinner.selectedItem?.toString() ?: ""
 
-            // Currently only UAE supported
             if (selectedCountry != "United Arab Emirates") {
                 Toast.makeText(
                     this,
@@ -58,10 +53,9 @@ class CountrySelectionActivity : BaseActivity() {
                 return@setOnClickListener
             }
 
-            // Save selection to Firestore with the correct field name and using merge
-            val data = hashMapOf("selectedCountry" to selectedCountry) // <<< KEY CHANGE HERE
+            val data = hashMapOf("selectedCountry" to selectedCountry)
             db.collection("users").document(userId)
-                .set(data, SetOptions.merge()) // <<< Using merge() to avoid overwriting other user data
+                .set(data, SetOptions.merge())
                 .addOnSuccessListener {
                     Toast.makeText(
                         this,
@@ -69,7 +63,7 @@ class CountrySelectionActivity : BaseActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    // ✅ Move to HomeActivity
+
                     val intent = Intent(this, HomeActivity::class.java)
                     startActivity(intent)
                     overridePendingTransition(0, 0)

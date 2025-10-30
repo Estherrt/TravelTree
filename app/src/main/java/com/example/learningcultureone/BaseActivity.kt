@@ -1,4 +1,4 @@
-package com.example.learningcultureone   // ✅ Make sure this matches your app's actual package name
+package com.example.learningcultureone
 
 import android.content.Intent
 import android.os.Bundle

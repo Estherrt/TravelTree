@@ -7,10 +7,9 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-// Assuming CountryProgress is actually meant to represent module progress within a country
-data class CountryProgress( // Renamed conceptually from moduleName to clarify
+data class CountryProgress(
     val moduleName: String = "",
-    val progress: Int = 0 // Progress value (0-100)
+    val progress: Int = 0
 )
 
 class CountryProgressAdapter(private val progressList: List<CountryProgress>) :
@@ -24,7 +23,7 @@ class CountryProgressAdapter(private val progressList: List<CountryProgress>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProgressViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_country_progress, parent, false) // Ensure this matches your item layout file name
+            .inflate(R.layout.item_country_progress, parent, false)
         return ProgressViewHolder(view)
     }
 

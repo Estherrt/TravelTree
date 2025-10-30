@@ -28,7 +28,6 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-        // Initialize views
         etEmail = findViewById(R.id.etEmail)
         etPassword = findViewById(R.id.etPassword)
         etRePassword = findViewById(R.id.etRePassword)
@@ -39,7 +38,6 @@ class RegisterActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        // Password visibility toggle
         ivPasswordToggle.setOnClickListener {
             passwordVisible = !passwordVisible
             if (passwordVisible) {

@@ -24,7 +24,6 @@ class CurrencyInfoActivity : BaseActivity() {
 
     private var popperMediaPlayer: MediaPlayer? = null
 
-    // Currency info dialogues
     private val dialogueLines = listOf(
         "The official currency of the United Arab Emirates is the United Arab Emirates Dirham (AED). It is issued and regulated by the Central Bank of the UAE.",
         "Subdivision: 1 dirham = 100 fils.\n\nCoins: Commonly used coins include 1, 5, 10, 25, and 50 fils, as well as a 1 dirham coin.\n\nBanknotes: Denominations available are 5, 10, 20, 50, 100, 200, 500, and 1000 dirhams.",
@@ -32,7 +31,6 @@ class CurrencyInfoActivity : BaseActivity() {
         "The UAE Dirham banknotes feature iconic landmarks and cultural symbols that reflect the nation's heritage.\n\nImages include the Burj Khalifa, showcasing Dubai’s architectural marvel, and the traditional dhow boats representing the country’s maritime history.\n\nThese visuals celebrate the blend of modernity and tradition that defines the UAE’s identity."
     )
 
-    // Seed growth animation stages
     private val forwardStages = listOf(0.0f, 0.11f, 0.22f, 0.33f)
     private var currentIndex = 0
     private var previousIndex = 0
@@ -40,7 +38,7 @@ class CurrencyInfoActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_currency_info)
-        setupBottomNavigation(R.id.navigation_home) // Highlight correct tab
+        setupBottomNavigation(R.id.navigation_home)
         supportActionBar?.hide()
 
         initViews()
@@ -49,7 +47,6 @@ class CurrencyInfoActivity : BaseActivity() {
         setupListeners()
     }
 
-    // ----------------- Initialization -----------------
     private fun initViews() {
         lottieSeed = findViewById(R.id.lottie_seed)
         lottieCharacter = findViewById(R.id.lottie_character)
@@ -72,7 +69,6 @@ class CurrencyInfoActivity : BaseActivity() {
         }
     }
 
-    // ----------------- UI and Navigation -----------------
     private fun setupListeners() {
         nextButton.setOnClickListener { onNextClicked() }
         prevButton.setOnClickListener { onPrevClicked() }
@@ -135,7 +131,6 @@ class CurrencyInfoActivity : BaseActivity() {
         nextButton.text = if (currentIndex == dialogueLines.size - 1) "Done" else "Next"
     }
 
-    // ----------------- Popper Animation -----------------
     private fun playPopperAnimationAndSound() {
         lottiePopper.visibility = View.VISIBLE
         lottiePopper.playAnimation()
@@ -170,7 +165,6 @@ class CurrencyInfoActivity : BaseActivity() {
             .show()
     }
 
-    // ----------------- Utility -----------------
     private fun stopTTS() {
         if (tts.isSpeaking) tts.stop()
     }

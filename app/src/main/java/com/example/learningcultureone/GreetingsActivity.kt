@@ -7,11 +7,10 @@ import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.view.View
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.lottie.LottieAnimationView
 import java.util.*
 
-class GreetingsActivity : AppCompatActivity() {
+class GreetingsActivity : BaseActivity() {
 
     private lateinit var dialogueBox: TextView
     private lateinit var pageIndicator: TextView
@@ -23,6 +22,8 @@ class GreetingsActivity : AppCompatActivity() {
     private lateinit var backButton: ImageView
 
     private var currentIndex = 0
+    private var previousIndex = 0
+
     private lateinit var tts: TextToSpeech
     private var popperMediaPlayer: MediaPlayer? = null
 
@@ -44,11 +45,29 @@ class GreetingsActivity : AppCompatActivity() {
         "ما اسمك؟\nWhat is your name?\nMa ismuk?"
     )
 
+    private val totalStages = greetings.size
+    private val forwardStages = List(totalStages) { i ->
+        i.toFloat() / (totalStages - 1)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_greetings)
 
-        // View bindings
+        setupBottomNavigation(R.id.navigation_home)
+        supportActionBar?.hide()
+
+        bindViews()
+        initTTS()
+        setupListeners()
+
+        lottieSeed.progress = 0f
+        lottieSeed.pauseAnimation()
+
+        updatePage()
+    }
+
+    private fun bindViews() {
         dialogueBox = findViewById(R.id.dialogue_box)
         pageIndicator = findViewById(R.id.page_indicator)
         listenButton = findViewById(R.id.btn_read_aloud)
@@ -57,32 +76,35 @@ class GreetingsActivity : AppCompatActivity() {
         lottieSeed = findViewById(R.id.lottie_seed)
         lottiePopper = findViewById(R.id.lottie_popper)
         backButton = findViewById(R.id.btn_back)
+    }
 
-        // Back button listener
+    private fun initTTS() {
+        tts = TextToSpeech(this) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                tts.language = Locale.US
+                tts.setSpeechRate(1.0f)
+                tts.setPitch(1.0f)
+            } else {
+                Toast.makeText(this, "TTS initialization failed", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun setupListeners() {
         backButton.setOnClickListener {
             markLevelAsCompleted()
             startActivity(Intent(this, HomeActivity::class.java))
             finish()
         }
 
-        // Setup Text-to-Speech (ENGLISH)
-        tts = TextToSpeech(this) { status ->
-            if (status == TextToSpeech.SUCCESS) {
-                tts.language = Locale.US
-            }
-        }
-
-        updatePage()
-
         listenButton.setOnClickListener {
-            val parts = greetings[currentIndex].split("\n")
-            val pronunciation = parts.getOrNull(2) ?: ""
+            val pronunciation = greetings[currentIndex].split("\n").getOrNull(2) ?: ""
             tts.speak(pronunciation, TextToSpeech.QUEUE_FLUSH, null, null)
         }
 
-
         nextButton.setOnClickListener {
             if (currentIndex < greetings.lastIndex) {
+                previousIndex = currentIndex
                 currentIndex++
                 updatePage()
             } else {
@@ -92,6 +114,7 @@ class GreetingsActivity : AppCompatActivity() {
 
         prevButton.setOnClickListener {
             if (currentIndex > 0) {
+                previousIndex = currentIndex
                 currentIndex--
                 updatePage()
             }
@@ -105,13 +128,17 @@ class GreetingsActivity : AppCompatActivity() {
             if (it == currentIndex) "●" else "○"
         }
 
-        // Progress calculation for Lottie animation (forward only)
-        val stepSize = 1f / greetings.size
-        val start = currentIndex * stepSize
-        val end = (currentIndex + 1) * stepSize
+        val startProgress = forwardStages[previousIndex]
+        val endProgress = forwardStages[currentIndex]
 
-        lottieSeed.setMinAndMaxProgress(start, end)
-        lottieSeed.playAnimation()
+        if (endProgress > startProgress) {
+            lottieSeed.setMinAndMaxProgress(startProgress, endProgress)
+            lottieSeed.speed = 1f
+            lottieSeed.playAnimation()
+        } else {
+            lottieSeed.pauseAnimation()
+            lottieSeed.progress = endProgress
+        }
 
         nextButton.text = if (currentIndex == greetings.lastIndex) "Done" else "Next"
         prevButton.isEnabled = currentIndex > 0
@@ -130,14 +157,14 @@ class GreetingsActivity : AppCompatActivity() {
                 lottiePopper.visibility = View.GONE
                 popperMediaPlayer?.release()
                 popperMediaPlayer = null
-                showPopup()
+                showCompletionDialog()
             }, duration)
         }
     }
 
-    private fun showPopup() {
+    private fun showCompletionDialog() {
         AlertDialog.Builder(this)
-            .setTitle("Congratulations!")
+            .setTitle("🎉 Congratulations!")
             .setMessage("You've completed the greetings learning session!")
             .setPositiveButton("OK") { dialog, _ ->
                 markLevelAsCompleted()
@@ -164,6 +191,7 @@ class GreetingsActivity : AppCompatActivity() {
     override fun onDestroy() {
         tts.shutdown()
         popperMediaPlayer?.release()
+        popperMediaPlayer = null
         super.onDestroy()
     }
 }
